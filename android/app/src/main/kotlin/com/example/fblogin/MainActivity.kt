@@ -1,4 +1,4 @@
-package io.instamobile.flutter_login_screen
+package com.example.fblogin
 
 import androidx.annotation.NonNull
 import io.flutter.embedding.android.FlutterActivity
