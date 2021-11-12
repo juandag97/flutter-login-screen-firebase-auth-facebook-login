@@ -10,6 +10,7 @@ import 'package:flutter_login_screen/ui/auth/login/login_bloc.dart';
 import 'package:flutter_login_screen/ui/auth/resetPasswordScreen/reset_password_screen.dart';
 import 'package:flutter_login_screen/ui/home/home_screen.dart';
 import 'package:flutter_login_screen/ui/loading_cubit.dart';
+import 'package:linkedin_login/linkedin_login.dart';
 import 'package:the_apple_sign_in/the_apple_sign_in.dart' as apple;
 
 class LoginScreen extends StatefulWidget {
@@ -25,6 +26,8 @@ class _LoginScreen extends State<LoginScreen> {
   final GlobalKey<FormState> _key = GlobalKey();
   AutovalidateMode _validate = AutovalidateMode.disabled;
   String? email, password;
+  late UserObject user;
+  bool logoutUser = false;
 
   @override
   Widget build(BuildContext context) {
@@ -80,8 +83,8 @@ class _LoginScreen extends State<LoginScreen> {
                   child: ListView(
                     children: [
                       const Padding(
-                        padding: EdgeInsets.only(
-                            top: 32.0, right: 16.0, left: 16.0),
+                        padding:
+                            EdgeInsets.only(top: 32.0, right: 16.0, left: 16.0),
                         child: Text(
                           'Sign In',
                           style: TextStyle(
@@ -227,6 +230,80 @@ class _LoginScreen extends State<LoginScreen> {
                           },
                         ),
                       ),
+
+                      Padding(
+                        padding: const EdgeInsets.only(
+                            right: 40.0, left: 40.0, bottom: 20),
+                      ),
+
+                      LinkedInButtonStandardWidget(
+                        textPadding: EdgeInsets.all(16.0),
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (BuildContext context) =>
+                                  LinkedInUserWidget(
+                                      appBar: AppBar(
+                                        title: Text('Linkedin'),
+                                      ),
+                                      destroySession: logoutUser,
+                                      redirectUrl:
+                                          'http://localhost:8080/linkedin/callback',
+                                      clientId: '78wfhiu8tihe4c',
+                                      clientSecret: '46olyKXEt3FWpRZi',
+                                      projection: [
+                                        ProjectionParameters.id,
+                                        ProjectionParameters.localizedFirstName,
+                                        ProjectionParameters.localizedLastName,
+                                        ProjectionParameters.firstName,
+                                        ProjectionParameters.lastName,
+                                        ProjectionParameters.profilePicture,
+                                      ],
+                                      onError: (UserFailedAction e) {
+                                        print('Error: ${e.toString()}');
+                                        print(
+                                            'Error: ${e.stackTrace.toString()}');
+                                      },
+                                      onGetUserProfile:
+                                          (UserSucceededAction linkedInUser) {
+                                        print(
+                                            'Access token ${linkedInUser.user.token.accessToken}');
+
+                                        print(
+                                            'User id: ${linkedInUser.user.userId}');
+                                        user = UserObject(
+                                          firstName: linkedInUser?.user
+                                              ?.firstName?.localized?.label,
+                                          lastName: linkedInUser?.user?.lastName
+                                              ?.localized?.label,
+                                          email: linkedInUser
+                                              ?.user
+                                              ?.email
+                                              ?.elements?[0]
+                                              ?.handleDeep
+                                              ?.emailAddress,
+                                          profileImageUrl: linkedInUser
+                                              ?.user
+                                              ?.profilePicture
+                                              ?.displayImageContent
+                                              ?.elements?[0]
+                                              ?.identifiers?[0]
+                                              ?.identifier,
+                                        );
+
+                                        setState(() {
+                                          logoutUser = false;
+                                        });
+                                        Navigator.pop(context);
+                                      }),
+                              fullscreenDialog: true,
+                            ),
+                          );
+                        },
+                        buttonText: 'Ingresa con Linkedin',
+                      ),
+
                       FutureBuilder<bool>(
                         future: apple.TheAppleSignIn.isAvailable(),
                         builder: (context, snapshot) {
@@ -269,4 +346,10 @@ class _LoginScreen extends State<LoginScreen> {
       }),
     );
   }
+}
+
+class UserObject {
+  UserObject({this.firstName, this.lastName, this.email, this.profileImageUrl});
+
+  String? firstName, lastName, email, profileImageUrl;
 }

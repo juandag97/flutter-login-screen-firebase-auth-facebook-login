@@ -56,8 +56,8 @@ class _SignUpState extends State<SignUpScreen> {
               BlocListener<SignUpBloc, SignUpState>(
                 listener: (context, state) {
                   if (state is ValidFields) {
-                    context.read<LoadingCubit>().showLoading(
-                        context, 'Creating new account, Please wait...', false);
+                    context.read<LoadingCubit>().showLoading(context,
+                        'Creando nuevo usuario, por favor espera ...', false);
                     context.read<AuthenticationBloc>().add(
                         SignupWithEmailAndPasswordEvent(
                             emailAddress: email!,
@@ -95,7 +95,7 @@ class _SignUpState extends State<SignUpScreen> {
                         crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                           const Text(
-                            'Create new account',
+                            'Crear nuevo usuario',
                             style: TextStyle(
                                 color: Color(COLOR_PRIMARY),
                                 fontWeight: FontWeight.bold,
@@ -175,7 +175,7 @@ class _SignUpState extends State<SignUpScreen> {
                               },
                               textInputAction: TextInputAction.next,
                               decoration: getInputDecoration(
-                                  hint: 'First Name',
+                                  hint: 'Nombres',
                                   darkMode: isDarkMode(context),
                                   errorColor: Theme.of(context).errorColor),
                             ),
@@ -191,7 +191,7 @@ class _SignUpState extends State<SignUpScreen> {
                               },
                               textInputAction: TextInputAction.next,
                               decoration: getInputDecoration(
-                                  hint: 'Last Name',
+                                  hint: 'Apellidos',
                                   darkMode: isDarkMode(context),
                                   errorColor: Theme.of(context).errorColor),
                             ),
@@ -227,7 +227,7 @@ class _SignUpState extends State<SignUpScreen> {
                                   const TextStyle(height: 0.8, fontSize: 18.0),
                               cursorColor: const Color(COLOR_PRIMARY),
                               decoration: getInputDecoration(
-                                  hint: 'Password',
+                                  hint: 'Contraseña',
                                   darkMode: isDarkMode(context),
                                   errorColor: Theme.of(context).errorColor),
                             ),
@@ -252,7 +252,7 @@ class _SignUpState extends State<SignUpScreen> {
                                   const TextStyle(height: 0.8, fontSize: 18.0),
                               cursorColor: const Color(COLOR_PRIMARY),
                               decoration: getInputDecoration(
-                                  hint: 'Confirm Password',
+                                  hint: 'Repetir Contraseña',
                                   darkMode: isDarkMode(context),
                                   errorColor: Theme.of(context).errorColor),
                             ),
@@ -273,7 +273,7 @@ class _SignUpState extends State<SignUpScreen> {
                                 ),
                               ),
                               child: const Text(
-                                'Sign Up',
+                                '¡Regístrame!',
                                 style: TextStyle(
                                   fontSize: 20,
                                   fontWeight: FontWeight.bold,
@@ -313,14 +313,14 @@ class _SignUpState extends State<SignUpScreen> {
                                 children: [
                                   const TextSpan(
                                     text:
-                                        'By creating an account you agree to our\n',
+                                        'Con este registro, estoy de acuerdo con los\n',
                                     style: TextStyle(color: Colors.grey),
                                   ),
                                   TextSpan(
                                     style: const TextStyle(
                                       color: Colors.blueAccent,
                                     ),
-                                    text: 'Terms of Use',
+                                    text: 'Términos de Uso',
                                     recognizer: TapGestureRecognizer()
                                       ..onTap = () async {
                                         if (await canLaunch(EULA)) {
@@ -351,12 +351,12 @@ class _SignUpState extends State<SignUpScreen> {
   _onCameraClick(BuildContext context) {
     final action = CupertinoActionSheet(
       title: const Text(
-        'Add Profile Picture',
+        'Agregar foto de perfil',
         style: TextStyle(fontSize: 15.0),
       ),
       actions: [
         CupertinoActionSheetAction(
-          child: const Text('Choose from gallery'),
+          child: const Text('Seleccionar de la galería'),
           isDefaultAction: false,
           onPressed: () async {
             Navigator.pop(context);
@@ -364,7 +364,7 @@ class _SignUpState extends State<SignUpScreen> {
           },
         ),
         CupertinoActionSheetAction(
-          child: const Text('Take a picture'),
+          child: const Text('Tomar una foto'),
           isDestructiveAction: false,
           onPressed: () async {
             Navigator.pop(context);
@@ -373,7 +373,8 @@ class _SignUpState extends State<SignUpScreen> {
         )
       ],
       cancelButton: CupertinoActionSheetAction(
-          child: const Text('Cancel'), onPressed: () => Navigator.pop(context)),
+          child: const Text('Cancelar'),
+          onPressed: () => Navigator.pop(context)),
     );
     showCupertinoModalPopup(context: context, builder: (context) => action);
   }
